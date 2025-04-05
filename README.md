@@ -1,6 +1,6 @@
 # 🎮 Video Creation Automation Scripts
 
-This repository contains a set of Python scripts designed to automate basic video editing tasks using [MoviePy](https://zulko.github.io/moviepy/). It supports:
+This repository contains a set of Python scripts designed to automate basic video editing tasks using python and ffmpeg. It supports:
 
 - ✅ Converting `.AVI` video files to `.MP4`
 - ✅ Concatenating multiple video clips into one
