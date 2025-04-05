@@ -89,3 +89,8 @@ This project is open-source and free to use under the [MIT License](LICENSE).
 
 Feel free to fork, submit pull requests, or suggest features via Issues.
 
+## Blog post about use cases
+[Automating Video Editing with Python](https://www.webdeveloper.today/2025/04/automating-video-editing-with-python.html)
+https://www.webdeveloper.today/2025/04/automating-video-editing-with-python.html
+
+
