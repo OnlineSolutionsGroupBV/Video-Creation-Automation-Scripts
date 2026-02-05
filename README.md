@@ -58,6 +58,34 @@ python merge_video.py
 
 ---
 
+### `overlay_branding.py`
+
+Adds a top logo overlay and bottom text to a video. The logo can be a local file or a URL.
+
+```bash
+python overlay_branding.py \
+  --input input.mp4 \
+  --output output.mp4 \
+  --logo https://onlinesolutionsgroup.website/img/logo-transparent.png \
+  --text onlinesolutionsgroup.website
+```
+
+Inline example:
+`python3 overlay_branding.py --input input.mp4 --output output.mp4 --logo https://onlinesolutionsgroup.website/img/logo-transparent.png --text onlinesolutionsgroup.website --font-size 36 --font-color white --logo-width 220 --top-margin 20 --bottom-margin 30`
+
+Working example (local logo):
+`python3 overlay_branding.py --input input.mp4 --output output.mp4 --logo logo.png --text onlinesolutionsgroup.website --font-size 36 --font-color white --logo-width 220 --top-margin 60 --bottom-margin 30`
+
+Optional flags:
+- `--font /path/to/font.ttf`
+- `--font-size 36`
+- `--font-color white`
+- `--logo-width 220`
+- `--top-margin 20`
+- `--bottom-margin 30`
+
+---
+
 ## ⚙ FFmpeg Path Configuration
 
 For macOS or custom FFmpeg setups, you may need to set the binary paths at the top of your script:
@@ -92,5 +120,3 @@ Feel free to fork, submit pull requests, or suggest features via Issues.
 ## Blog post about use cases
 [Automating Video Editing with Python](https://www.webdeveloper.today/2025/04/automating-video-editing-with-python.html)
 https://www.webdeveloper.today/2025/04/automating-video-editing-with-python.html
-
-
