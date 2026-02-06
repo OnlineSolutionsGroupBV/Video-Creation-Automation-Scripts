@@ -1,0 +1,20 @@
+{
+  "input": "input.mp4",
+  "branded_output": "output.mp4",
+  "final_output": "output-meta.mp4",
+  "logo": "logo.png",
+  "text": "onlinesolutionsgroup.website",
+  "font": "",
+  "font_size": 36,
+  "font_color": "white",
+  "logo_width": 220,
+  "top_margin": 60,
+  "bottom_margin": 30,
+  "text_margin": 12,
+  "text_position": "top",
+  "metadata": {
+    "title": "OnlineSolutionsGroup.website – Social Media Video",
+    "artist": "Online Solutions Group B.V.",
+    "comment": "Professioneel geproduceerde video voor social media."
+  }
+}

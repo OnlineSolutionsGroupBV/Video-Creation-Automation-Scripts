@@ -60,7 +60,7 @@ python merge_video.py
 
 ### `overlay_branding.py`
 
-Adds a top logo overlay and bottom text to a video. The logo can be a local file or a URL.
+Adds a top logo overlay and text under the logo. The logo can be a local file or a URL.
 
 ```bash
 python overlay_branding.py \
@@ -83,6 +83,8 @@ Optional flags:
 - `--logo-width 220`
 - `--top-margin 20`
 - `--bottom-margin 30`
+- `--text-margin 12`
+- `--text-position top|bottom`
 
 ---
 
@@ -95,6 +97,38 @@ import os
 os.environ["FFMPEG_BINARY"] = "/usr/local/bin/ffmpeg"
 os.environ["FFPLAY_BINARY"] = "/usr/local/bin/ffplay"
 ```
+
+---
+
+## 🎛 Metadata Commands
+
+Show metadata (JSON):
+`ffprobe -v error -show_format -show_streams -of json input.mp4`
+
+Edit metadata (inline):
+`ffmpeg -y -i output.mp4 -c copy -metadata title="Mijn Titel" -metadata artist="Online Solutions Group" -metadata comment="Beschrijving" output-meta.mp4`
+
+---
+
+## 🔁 One-Command Pipeline (Config Driven)
+
+Edit `config.json`, then run:
+`bash pipeline.sh`
+
+This will:
+- Create a branded video at the `branded_output` path (e.g. `output.mp4`)
+- Create a final video with updated metadata at the `final_output` path (e.g. `output-meta.mp4`)
+
+Config fields (defaults in `config.json`):
+- `input`: input video (e.g. `input.mp4`)
+- `branded_output`: output after branding (e.g. `output.mp4`)
+- `final_output`: output after metadata update (e.g. `output-meta.mp4`)
+- `logo`: logo file path or URL
+- `text`: bottom text
+- `font`: path to `.ttf` (empty = default)
+- `font_size`, `font_color`, `logo_width`, `top_margin`, `bottom_margin`, `text_position`
+- `text_margin`
+- `metadata.title`, `metadata.artist`, `metadata.comment`
 
 ---
 

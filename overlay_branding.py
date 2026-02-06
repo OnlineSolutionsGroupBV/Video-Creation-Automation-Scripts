@@ -6,6 +6,34 @@ import tempfile
 import urllib.request
 
 
+def _probe_image_size(path: str) -> tuple[int, int] | None:
+    try:
+        result = subprocess.run(
+            [
+                "ffprobe",
+                "-v",
+                "error",
+                "-select_streams",
+                "v:0",
+                "-show_entries",
+                "stream=width,height",
+                "-of",
+                "csv=p=0:s=x",
+                path,
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        line = result.stdout.strip()
+        if "x" in line:
+            w, h = line.split("x", 1)
+            return int(w), int(h)
+    except Exception:
+        pass
+    return None
+
+
 def _download_logo(url: str) -> str:
     tmp_dir = tempfile.mkdtemp(prefix="logo_")
     local_path = os.path.join(tmp_dir, "logo")
@@ -81,6 +109,18 @@ def main() -> None:
         default=30,
         help="Bottom margin for text in px",
     )
+    parser.add_argument(
+        "--text-position",
+        choices=["top", "bottom"],
+        default="top",
+        help="Place text under logo (top) or near bottom",
+    )
+    parser.add_argument(
+        "--text-margin",
+        type=int,
+        default=12,
+        help="Margin between logo and text in px",
+    )
 
     args = parser.parse_args()
 
@@ -98,6 +138,18 @@ def main() -> None:
 
     font_path = _resolve_font(args.font)
 
+    logo_size = _probe_image_size(logo_path)
+    if logo_size:
+        orig_w, orig_h = logo_size
+        scaled_logo_h = int(round(args.logo_width * (orig_h / orig_w)))
+    else:
+        scaled_logo_h = args.logo_width
+
+    if args.text_position == "bottom":
+        text_y = f"h-text_h-{args.bottom_margin}"
+    else:
+        text_y = str(args.top_margin + scaled_logo_h + args.text_margin)
+
     safe_text = _escape_drawtext(args.text)
     drawtext = (
         "drawtext="
@@ -106,7 +158,7 @@ def main() -> None:
         f"fontcolor={args.font_color}:"
         f"fontsize={args.font_size}:"
         "x=(w-text_w)/2:"
-        f"y=h-text_h-{args.bottom_margin}"
+        f"y={text_y}"
     )
 
     filter_complex = (
