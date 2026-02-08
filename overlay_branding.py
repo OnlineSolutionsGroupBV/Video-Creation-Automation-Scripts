@@ -92,6 +92,17 @@ def main() -> None:
         help="Font color (ffmpeg color value)",
     )
     parser.add_argument(
+        "--text-border-width",
+        type=int,
+        default=2,
+        help="Text border width in px",
+    )
+    parser.add_argument(
+        "--text-border-color",
+        default="gray",
+        help="Text border color (ffmpeg color value)",
+    )
+    parser.add_argument(
         "--logo-width",
         type=int,
         default=220,
@@ -157,6 +168,8 @@ def main() -> None:
         f"text='{safe_text}':"
         f"fontcolor={args.font_color}:"
         f"fontsize={args.font_size}:"
+        f"borderw={args.text_border_width}:"
+        f"bordercolor={args.text_border_color}:"
         "x=(w-text_w)/2:"
         f"y={text_y}"
     )

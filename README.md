@@ -71,20 +71,43 @@ python overlay_branding.py \
 ```
 
 Inline example:
-`python3 overlay_branding.py --input input.mp4 --output output.mp4 --logo https://onlinesolutionsgroup.website/img/logo-transparent.png --text onlinesolutionsgroup.website --font-size 36 --font-color white --logo-width 220 --top-margin 20 --bottom-margin 30`
+`python3 overlay_branding.py --input input.mp4 --output output.mp4 --logo https://onlinesolutionsgroup.website/img/logo-transparent.png --text onlinesolutionsgroup.website --font-size 36 --font-color white --text-border-width 2 --text-border-color gray --logo-width 220 --top-margin 20 --bottom-margin 30`
 
 Working example (local logo):
-`python3 overlay_branding.py --input input.mp4 --output output.mp4 --logo logo.png --text onlinesolutionsgroup.website --font-size 36 --font-color white --logo-width 220 --top-margin 60 --bottom-margin 30`
+`python3 overlay_branding.py --input input.mp4 --output output.mp4 --logo logo.png --text onlinesolutionsgroup.website --font-size 36 --font-color white --text-border-width 2 --text-border-color gray --logo-width 220 --top-margin 60 --bottom-margin 30`
 
 Optional flags:
 - `--font /path/to/font.ttf`
 - `--font-size 36`
 - `--font-color white`
+- `--text-border-width 2`
+- `--text-border-color gray`
 - `--logo-width 220`
 - `--top-margin 20`
 - `--bottom-margin 30`
 - `--text-margin 12`
 - `--text-position top|bottom`
+
+---
+
+### `add_random_audio.py`
+
+Adds a random audio clip from a folder to a video. Supports replacing audio or mixing.
+
+```bash
+python3 add_random_audio.py \
+  --input-video input.mp4 \
+  --output output-audio.mp4 \
+  --audio-folder audio_clips \
+  --duration 5 \
+  --mode replace
+```
+
+Optional flags:
+- `--mode replace|mix`
+- `--audio-volume 1.0`
+- `--original-volume 1.0`
+- `--seed 123`
 
 ---
 
@@ -126,7 +149,13 @@ Config fields (defaults in `config.json`):
 - `logo`: logo file path or URL
 - `text`: bottom text
 - `font`: path to `.ttf` (empty = default)
-- `font_size`, `font_color`, `logo_width`, `top_margin`, `bottom_margin`, `text_position`
+- `font_size`, `font_color`, `text_border_width`, `text_border_color`, `logo_width`, `top_margin`, `bottom_margin`, `text_position`
+- `audio_folder`: folder with audio clips (empty = skip)
+- `audio_duration`: seconds to use (default `5`)
+- `audio_mode`: `replace` or `mix`
+- `audio_volume`: volume for selected audio
+- `original_volume`: volume for original audio when mixing
+- `audio_output`: optional path for the intermediate audio output
 - `text_margin`
 - `metadata.title`, `metadata.artist`, `metadata.comment`
 

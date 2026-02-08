@@ -29,6 +29,14 @@ TEXT="$(read_json text)"
 FONT="$(read_json font)"
 FONT_SIZE="$(read_json font_size)"
 FONT_COLOR="$(read_json font_color)"
+TEXT_BORDER_WIDTH="$(read_json text_border_width)"
+TEXT_BORDER_COLOR="$(read_json text_border_color)"
+AUDIO_FOLDER="$(read_json audio_folder)"
+AUDIO_DURATION="$(read_json audio_duration)"
+AUDIO_MODE="$(read_json audio_mode)"
+AUDIO_VOLUME="$(read_json audio_volume)"
+ORIGINAL_VOLUME="$(read_json original_volume)"
+AUDIO_OUTPUT="$(read_json audio_output)"
 LOGO_WIDTH="$(read_json logo_width)"
 TOP_MARGIN="$(read_json top_margin)"
 BOTTOM_MARGIN="$(read_json bottom_margin)"
@@ -49,6 +57,24 @@ fi
 if [[ -z "$TEXT_POSITION" ]]; then
   TEXT_POSITION="top"
 fi
+if [[ -z "$TEXT_BORDER_WIDTH" ]]; then
+  TEXT_BORDER_WIDTH="2"
+fi
+if [[ -z "$TEXT_BORDER_COLOR" ]]; then
+  TEXT_BORDER_COLOR="gray"
+fi
+if [[ -z "$AUDIO_DURATION" ]]; then
+  AUDIO_DURATION="5"
+fi
+if [[ -z "$AUDIO_MODE" ]]; then
+  AUDIO_MODE="replace"
+fi
+if [[ -z "$AUDIO_VOLUME" ]]; then
+  AUDIO_VOLUME="1.0"
+fi
+if [[ -z "$ORIGINAL_VOLUME" ]]; then
+  ORIGINAL_VOLUME="1.0"
+fi
 
 if [[ "$BRANDED_OUTPUT" == */* ]]; then
   mkdir -p "$(dirname "$BRANDED_OUTPUT")"
@@ -65,6 +91,8 @@ BRAND_CMD=(
   --text "$TEXT"
   --font-size "$FONT_SIZE"
   --font-color "$FONT_COLOR"
+  --text-border-width "$TEXT_BORDER_WIDTH"
+  --text-border-color "$TEXT_BORDER_COLOR"
   --logo-width "$LOGO_WIDTH"
   --top-margin "$TOP_MARGIN"
   --bottom-margin "$BOTTOM_MARGIN"
@@ -78,7 +106,27 @@ fi
 
 "${BRAND_CMD[@]}"
 
-ffmpeg -y -i "$BRANDED_OUTPUT" -c copy \
+SOURCE_FOR_META="$BRANDED_OUTPUT"
+if [[ -n "$AUDIO_FOLDER" ]]; then
+  if [[ -z "$AUDIO_OUTPUT" ]]; then
+    base="${BRANDED_OUTPUT%.*}"
+    AUDIO_OUTPUT="${base}-audio.mp4"
+  fi
+  if [[ "$AUDIO_OUTPUT" == */* ]]; then
+    mkdir -p "$(dirname "$AUDIO_OUTPUT")"
+  fi
+  python3 add_random_audio.py \
+    --input-video "$BRANDED_OUTPUT" \
+    --output "$AUDIO_OUTPUT" \
+    --audio-folder "$AUDIO_FOLDER" \
+    --duration "$AUDIO_DURATION" \
+    --mode "$AUDIO_MODE" \
+    --audio-volume "$AUDIO_VOLUME" \
+    --original-volume "$ORIGINAL_VOLUME"
+  SOURCE_FOR_META="$AUDIO_OUTPUT"
+fi
+
+ffmpeg -y -i "$SOURCE_FOR_META" -c copy \
   -metadata title="$META_TITLE" \
   -metadata artist="$META_ARTIST" \
   -metadata comment="$META_COMMENT" \
